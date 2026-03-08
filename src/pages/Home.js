@@ -58,7 +58,7 @@ const Home = () => {
           fontWeight: 500,
         }}
       >
-        Full Stack Developer
+        Solutions Architect | AI Enthusiast | Full Stack Developer
       </Typography>
       <Typography
         variant="body1"

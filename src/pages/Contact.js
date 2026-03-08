@@ -3,16 +3,15 @@ import {
   Container,
   Box,
   Typography,
-  TextField,
-  Button,
-  Paper,
-  Stack,
   Link,
   useTheme,
+  Paper,
+  Stack,
 } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const Contact = () => {
   const theme = useTheme();
@@ -50,45 +49,6 @@ const Contact = () => {
 
       <Stack spacing={4}>
         {/* Contact Info */}
-        <Stack spacing={2}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <EmailIcon sx={{ color: theme.palette.primary.main, fontSize: 28 }} />
-            <Box>
-              <Typography variant="body2" color="text.secondary">
-                Email
-              </Typography>
-              <Link href="mailto:your.email@example.com" sx={{ fontSize: '1rem', color: theme.palette.primary.main }}>
-                your.email@example.com
-              </Link>
-            </Box>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <PhoneIcon sx={{ color: theme.palette.secondary.main, fontSize: 28 }} />
-            <Box>
-              <Typography variant="body2" color="text.secondary">
-                Phone
-              </Typography>
-              <Link href="tel:+1234567890" sx={{ fontSize: '1rem', color: theme.palette.secondary.main }}>
-                +1 (234) 567-890
-              </Link>
-            </Box>
-          </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <LocationOnIcon sx={{ color: '#10b981', fontSize: 28 }} />
-            <Box>
-              <Typography variant="body2" color="text.secondary">
-                Location
-              </Typography>
-              <Typography variant="body1">
-                Your City, Your Country
-              </Typography>
-            </Box>
-          </Box>
-        </Stack>
-
-        {/* Contact Form */}
         <Paper
           sx={{
             p: 4,
@@ -96,44 +56,83 @@ const Contact = () => {
             border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-            Send Me a Message
-          </Typography>
-          <Stack spacing={2} component="form">
-            <TextField
-              fullWidth
-              label="Your Name"
-              variant="outlined"
-              placeholder="Enter your name"
-            />
-            <TextField
-              fullWidth
-              label="Your Email"
-              type="email"
-              variant="outlined"
-              placeholder="Enter your email"
-            />
-            <TextField
-              fullWidth
-              label="Subject"
-              variant="outlined"
-              placeholder="What's this about?"
-            />
-            <TextField
-              fullWidth
-              label="Message"
-              multiline
-              rows={5}
-              variant="outlined"
-              placeholder="Your message here..."
-            />
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ mt: 2 }}
-            >
-              Send Message
-            </Button>
+          <Stack spacing={3}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <EmailIcon sx={{ color: theme.palette.primary.main, fontSize: 35 }} />
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                  Email
+                </Typography>
+                <Link
+                  href="mailto:dinesh24gd@gmail.com"
+                  sx={{
+                    fontSize: '1.1rem',
+                    color: theme.palette.primary.main,
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
+                  dinesh24gd@gmail.com
+                </Link>
+              </Box>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <PhoneIcon sx={{ color: theme.palette.secondary.main, fontSize: 35 }} />
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                  Phone
+                </Typography>
+                <Link
+                  href="tel:+16108646561"
+                  sx={{
+                    fontSize: '1.1rem',
+                    color: theme.palette.secondary.main,
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
+                  +1 (610) 864-6561
+                </Link>
+              </Box>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <LocationOnIcon sx={{ color: '#10b981', fontSize: 35 }} />
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                  Location
+                </Typography>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  Gaithersburg, MD, USA
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <LinkedInIcon sx={{ color: '#0a66c2', fontSize: 35 }} />
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
+                  LinkedIn
+                </Typography>
+                <Link
+                  href="https://www.linkedin.com/in/dinesh-ganesan-691a85a5/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    fontSize: '1.1rem',
+                    color: '#0a66c2',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' },
+                  }}
+                >
+                  Visit My Profile
+                </Link>
+              </Box>
+            </Box>
           </Stack>
         </Paper>
       </Stack>

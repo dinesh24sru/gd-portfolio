@@ -1,8 +1,9 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, IconButton, Tooltip } from '@mui/material';
+import { AppBar, Toolbar, Box, Button, IconButton, Tooltip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import Logo from './Logo';
 import { useThemeToggle } from '../context/ThemeContext';
 
 const Navbar = () => {
@@ -13,20 +14,9 @@ const Navbar = () => {
   return (
     <AppBar position="static" sx={{ boxShadow: 3 }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 800,
-            letterSpacing: 0.5,
-            fontSize: '1.4rem',
-            background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          Portfolio
-        </Typography>
+        <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+          <Logo />
+        </Box>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           {navItems.map((item, idx) => (
             <Button

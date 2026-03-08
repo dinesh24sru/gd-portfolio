@@ -22,7 +22,7 @@ const Footer = () => {
     <Container maxWidth="lg">
       <Stack direction="row" spacing={3} justifyContent="center" sx={{ mb: 2 }}>
         <Link
-          href="https://linkedin.com"
+          href="https://www.linkedin.com/in/dinesh-ganesan-691a85a5/"
           target="_blank"
           rel="noopener noreferrer"
           sx={{
@@ -36,7 +36,7 @@ const Footer = () => {
           LinkedIn
         </Link>
         <Link
-          href="https://github.com"
+          href="https://github.com/dinesh24sru"
           target="_blank"
           rel="noopener noreferrer"
           sx={{

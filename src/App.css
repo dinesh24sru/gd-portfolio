@@ -1,0 +1,79 @@
+/* Removed leftover blocks from template */
+
+  .navbar {
+    background: #222;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .main-content {
+    min-height: 70vh;
+    padding: 2rem;
+  }
+
+  .home {
+    text-align: center;
+  }
+
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    border: 3px solid #222;
+  }
+
+  .project-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .project-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    width: 260px;
+    text-align: left;
+  }
+
+  .project-card h3 {
+    margin-top: 0;
+  }
+
+  .footer {
+    background: #222;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+  }
+
+  .footer a {
+    color: #4e9af1;
+    margin: 0 0.5rem;
+    text-decoration: none;
+  }

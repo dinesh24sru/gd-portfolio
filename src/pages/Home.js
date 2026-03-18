@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Container,
   Box,
@@ -45,23 +45,204 @@ const highlights = [
 const Home = () => {
   const theme = useTheme();
   const [hoveredCard, setHoveredCard] = useState(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let rafId;
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const particles = [];
+    const agents = [];
+    const rand = (min, max) => min + Math.random() * (max - min);
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      const height = rect.height || window.innerHeight * 0.6;
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      particles.length = 0;
+      agents.length = 0;
+
+      const baseDensity = (width * height) / 14000;
+      const density =
+        width < 600 ? baseDensity * 0.6 : width < 900 ? baseDensity * 0.85 : baseDensity;
+
+      const target = Math.floor(density);
+
+      for (let i = 0; i < target; i++) {
+        const p = {
+          x: rand(0, width),
+          y: rand(0, height),
+          vx: rand(-0.3, 0.3),
+          vy: rand(-0.25, 0.25),
+          r: rand(1.2, 2.4),
+          a: rand(0.4, 0.9),
+          agent: false,
+        };
+        particles.push(p);
+      }
+
+      for (let i = 0; i < Math.min(4, particles.length); i++) {
+        const idx = Math.floor(rand(0, particles.length));
+        if (!particles[idx].agent) {
+          particles[idx].agent = true;
+          particles[idx].r *= 1.6;
+          agents.push(particles[idx]);
+        }
+      }
+    };
+
+    let lastPulse = 0;
+    const PULSE_INTERVAL = 2000;
+
+    const draw = (ts) => {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      const height = rect.height || window.innerHeight * 0.6;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const base = '148,163,184';
+      const accent = theme.palette.mode === 'dark' ? '129,140,248' : '79,70,229';
+
+      if (!prefersReducedMotion && ts - lastPulse > PULSE_INTERVAL && agents.length) {
+        lastPulse = ts;
+        const active = agents[Math.floor(rand(0, agents.length))];
+        active.pulseUntil = ts + 1000;
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x;
+          const dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 140;
+          if (dist < maxDist) {
+            const t = 1 - dist / maxDist;
+            const nearAgent = p.agent || q.agent;
+            const color = nearAgent ? accent : base;
+            const alpha = nearAgent ? 0.28 * t : 0.14 * t;
+
+            ctx.strokeStyle = `rgba(${color}, ${alpha})`;
+            ctx.lineWidth = nearAgent ? 1.3 : 0.8;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const p of particles) {
+        const isPulsing = p.pulseUntil && ts < p.pulseUntil;
+        const color = p.agent ? accent : base;
+        const alpha = isPulsing ? 1 : p.a;
+
+        ctx.fillStyle = `rgba(${color}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * (isPulsing ? 1.4 : 1), 0, Math.PI * 2);
+        ctx.fill();
+
+        if (!prefersReducedMotion) {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < -20) p.x = width + 20;
+          if (p.x > width + 20) p.x = -20;
+          if (p.y < -20) p.y = height + 20;
+          if (p.y > height + 20) p.y = -20;
+        }
+      }
+
+      rafId = requestAnimationFrame(draw);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+    rafId = requestAnimationFrame(draw);
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(rafId);
+    };
+  }, [theme.palette.mode]);
 
   return (
-    <Box sx={{ ...fadeInUp, ...float, ...pulse }}>
+    <Box sx={{ ...fadeInUp, ...float, ...pulse, position: 'relative', overflow: 'hidden' }}>
+      <Box
+        component="canvas"
+        ref={canvasRef}
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none',
+          opacity: { xs: 0.22, sm: 0.3, md: 0.35 },
+        }}
+      />
       <Box
         sx={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: { xs: '40vh', sm: '45vh', md: '50vh' },
-          background: theme.palette.mode === 'dark'
-            ? `radial-gradient(ellipse 80% 60% at 50% 0%, ${theme.palette.primary.main}22 0%, transparent 50%)`
-            : `radial-gradient(ellipse 80% 60% at 50% 0%, ${theme.palette.primary.main}18 0%, transparent 50%)`,
-          pointerEvents: 'none',
+          inset: 0,
           zIndex: 0,
+          pointerEvents: 'none',
+          opacity: { xs: 0.18, sm: 0.22 },
+          mixBlendMode: theme.palette.mode === 'dark' ? 'screen' : 'multiply',
         }}
-      />
+      >
+        <svg width="100%" height="100%" viewBox="0 0 1200 700" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="cgrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#6366f1" stopOpacity="0.7" />
+              <stop offset="1" stopColor="#ec4899" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+
+          <g fill="none" stroke="rgba(148,163,184,0.45)" strokeWidth="2">
+            <path d="M70 90 H340 V160 H540 V240 H780" />
+            <path d="M150 520 H360 V430 H520 V360 H700 V280 H1120" />
+            <path d="M90 300 H280 V340 H430 V420 H620" />
+            <path d="M820 560 V420 H980 V360 H1120" />
+            <path d="M540 240 H620 V180 H760" />
+          </g>
+
+          <g fill="none" stroke="url(#cgrad)" strokeWidth="2.5" strokeDasharray="10 14" opacity="0.65">
+            <path d="M70 90 H340 V160 H540 V240 H780">
+              <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="7s" repeatCount="indefinite" />
+            </path>
+            <path d="M150 520 H360 V430 H520 V360 H700 V280 H1120">
+              <animate attributeName="stroke-dashoffset" from="0" to="-260" dur="9s" repeatCount="indefinite" />
+            </path>
+          </g>
+
+          <g fill="rgba(99,102,241,0.7)">
+            <circle cx="70" cy="90" r="5" />
+            <circle cx="340" cy="90" r="5" />
+            <circle cx="340" cy="160" r="5" />
+            <circle cx="540" cy="160" r="5" />
+            <circle cx="540" cy="240" r="5" />
+            <circle cx="780" cy="240" r="5" />
+            <circle cx="1120" cy="280" r="5" />
+            <circle cx="150" cy="520" r="5" />
+            <circle cx="980" cy="360" r="5" />
+            <circle cx="1120" cy="360" r="5" />
+          </g>
+        </svg>
+      </Box>
+
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
         <Box
           sx={{

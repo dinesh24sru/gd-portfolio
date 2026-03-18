@@ -5,8 +5,7 @@ import {
   CardActions,
   CardMedia,
   Typography,
-  Button,
-  Box,
+  Button
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 

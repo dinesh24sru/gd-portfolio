@@ -6,6 +6,7 @@ import {
   useTheme,
   IconButton,
   Stack,
+  useMediaQuery,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -50,8 +51,10 @@ const chunk = (arr, size) => {
 
 const Projects = () => {
   const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const slides = chunk(projects, PROJECTS_PER_SLIDE);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentMobile, setCurrentMobile] = useState(0);
 
   const goNext = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -60,6 +63,14 @@ const Projects = () => {
   const goPrev = useCallback(() => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
+
+  const goNextMobile = useCallback(() => {
+    setCurrentMobile((prev) => (prev + 1) % projects.length);
+  }, []);
+
+  const goPrevMobile = useCallback(() => {
+    setCurrentMobile((prev) => (prev - 1 + projects.length) % projects.length);
+  }, []);
 
   return (
     <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
@@ -94,102 +105,152 @@ const Projects = () => {
           Here are some of my recent projects. Click on any project to learn more and see the code.
         </Typography>
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: { xs: 0.5, sm: 2 },
-            mx: { xs: -1, sm: 0 },
-          }}
-        >
-          {slides.length > 1 && (
-            <IconButton
-              onClick={goPrev}
-              aria-label="Previous projects"
-              sx={{
-                flexShrink: 0,
-                bgcolor: 'background.paper',
-                boxShadow: 2,
-                '&:hover': { bgcolor: 'action.hover' },
-                '&:disabled': { opacity: 0.5 },
-              }}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-          )}
-
+        {isMdUp ? (
           <Box
             sx={{
-              flex: 1,
-              minWidth: 0,
-              position: 'relative',
-              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              gap: { xs: 0.5, sm: 2 },
+              mx: { xs: -1, sm: 0 },
             }}
           >
+            {slides.length > 1 && (
+              <IconButton
+                onClick={goPrev}
+                aria-label="Previous projects"
+                sx={{
+                  flexShrink: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: 'action.hover' },
+                  '&:disabled': { opacity: 0.5 },
+                }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+            )}
+
             <Box
               sx={{
-                display: 'flex',
-                transition: 'transform 0.4s ease-out',
-                transform: `translateX(-${currentSlide * 100}%)`,
+                flex: 1,
+                minWidth: 0,
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
-              {slides.map((slideProjects, slideIdx) => (
-                <Box
-                  key={slideIdx}
-                  sx={{
-                    flex: '0 0 100%',
-                    width: '100%',
-                    px: { xs: 1, sm: 0 },
-                  }}
-                >
-                  <Stack
-                    direction="row"
-                    spacing={2}
+              <Box
+                sx={{
+                  display: 'flex',
+                  transition: 'transform 0.4s ease-out',
+                  transform: `translateX(-${currentSlide * 100}%)`,
+                }}
+              >
+                {slides.map((slideProjects, slideIdx) => (
+                  <Box
+                    key={slideIdx}
                     sx={{
-                      justifyContent: { xs: 'center', md: 'space-between' },
-                      flexWrap: 'nowrap',
-                      gap: 2,
+                      flex: '0 0 100%',
+                      width: '100%',
+                      px: { xs: 1, sm: 0 },
                     }}
                   >
-                    {slideProjects.map((project, idx) => (
-                      <Box
-                        key={idx}
-                        sx={{
-                          flex: '1 1 0',
-                          minWidth: 0,
-                          maxWidth: { xs: '100%', md: '33.333%' },
-                        }}
-                      >
-                        <ProjectCard project={project} />
-                      </Box>
-                    ))}
-                    {slideProjects.length < PROJECTS_PER_SLIDE &&
-                      Array.from({ length: PROJECTS_PER_SLIDE - slideProjects.length }).map((_, i) => (
-                        <Box key={`placeholder-${i}`} sx={{ flex: '1 1 0', minWidth: 0, maxWidth: { xs: '100%', md: '33.333%' } }} />
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{
+                        justifyContent: { xs: 'center', md: 'space-between' },
+                        flexWrap: 'nowrap',
+                        gap: 2,
+                      }}
+                    >
+                      {slideProjects.map((project, idx) => (
+                        <Box
+                          key={idx}
+                          sx={{
+                            flex: '1 1 0',
+                            minWidth: 0,
+                            maxWidth: { xs: '100%', md: '33.333%' },
+                          }}
+                        >
+                          <ProjectCard project={project} />
+                        </Box>
                       ))}
-                  </Stack>
-                </Box>
-              ))}
+                      {slideProjects.length < PROJECTS_PER_SLIDE &&
+                        Array.from({ length: PROJECTS_PER_SLIDE - slideProjects.length }).map((_, i) => (
+                          <Box key={`placeholder-${i}`} sx={{ flex: '1 1 0', minWidth: 0, maxWidth: { xs: '100%', md: '33.333%' } }} />
+                        ))}
+                    </Stack>
+                  </Box>
+                ))}
+              </Box>
             </Box>
+
+            {slides.length > 1 && (
+              <IconButton
+                onClick={goNext}
+                aria-label="Next projects"
+                sx={{
+                  flexShrink: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            )}
           </Box>
+        ) : (
+          <Box sx={{ maxWidth: 560, mx: 'auto' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <IconButton
+                onClick={goPrevMobile}
+                aria-label="Previous project"
+                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                {currentMobile + 1} / {projects.length}
+              </Typography>
+              <IconButton
+                onClick={goNextMobile}
+                aria-label="Next project"
+                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </Box>
 
-          {slides.length > 1 && (
-            <IconButton
-              onClick={goNext}
-              aria-label="Next projects"
-              sx={{
-                flexShrink: 0,
-                bgcolor: 'background.paper',
-                boxShadow: 2,
-                '&:hover': { bgcolor: 'action.hover' },
-              }}
-            >
-              <ChevronRightIcon />
-            </IconButton>
-          )}
-        </Box>
+            <ProjectCard project={projects[currentMobile]} />
 
-        {slides.length > 1 && (
+            {projects.length > 1 && (
+              <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
+                {projects.map((_, idx) => (
+                  <Box
+                    key={idx}
+                    onClick={() => setCurrentMobile(idx)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && setCurrentMobile(idx)}
+                    aria-label={`Go to project ${idx + 1}`}
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      bgcolor: currentMobile === idx ? 'primary.main' : 'action.selected',
+                      cursor: 'pointer',
+                      transition: 'transform 0.2s, background-color 0.2s',
+                      '&:hover': { transform: 'scale(1.2)' },
+                    }}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Box>
+        )}
+
+        {isMdUp && slides.length > 1 && (
           <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
             {slides.map((_, idx) => (
               <Box

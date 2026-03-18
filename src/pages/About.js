@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
   CardContent,
+  useMediaQuery,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -110,8 +111,10 @@ const aboutCards = [
 
 const About = () => {
   const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const slides = chunk(aboutCards, CARDS_PER_SLIDE);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentMobile, setCurrentMobile] = useState(0);
 
   const goNext = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -121,10 +124,24 @@ const About = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
+  const goNextMobile = useCallback(() => {
+    setCurrentMobile((prev) => (prev + 1) % aboutCards.length);
+  }, []);
+
+  const goPrevMobile = useCallback(() => {
+    setCurrentMobile((prev) => (prev - 1 + aboutCards.length) % aboutCards.length);
+  }, []);
+
   useEffect(() => {
-    const timer = setInterval(goNext, AUTO_ADVANCE_MS);
+    const timer = setInterval(() => {
+      if (isMdUp) {
+        goNext();
+      } else {
+        goNextMobile();
+      }
+    }, AUTO_ADVANCE_MS);
     return () => clearInterval(timer);
-  }, [goNext]);
+  }, [goNext, goNextMobile, isMdUp]);
 
   return (
     <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
@@ -146,174 +163,279 @@ const About = () => {
           About Me
         </Typography>
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: { xs: 0.5, sm: 2 },
-            mx: { xs: -1, sm: 0 },
-          }}
-        >
-          {slides.length > 1 && (
-            <IconButton
-              onClick={goPrev}
-              aria-label="Previous"
-            sx={{
-              flexShrink: 0,
-              bgcolor: 'background.paper',
-              boxShadow: 2,
-              '&:hover': { bgcolor: 'action.hover' },
-            }}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-          )}
-
+        {isMdUp ? (
           <Box
             sx={{
-              flex: 1,
-              minWidth: 0,
-              position: 'relative',
-              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              gap: { xs: 0.5, sm: 2 },
+              mx: { xs: -1, sm: 0 },
             }}
           >
+            {slides.length > 1 && (
+              <IconButton
+                onClick={goPrev}
+                aria-label="Previous"
+                sx={{
+                  flexShrink: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+            )}
+
             <Box
               sx={{
-                display: 'flex',
-                transition: 'transform 0.4s ease-out',
-                transform: `translateX(-${currentSlide * 100}%)`,
+                flex: 1,
+                minWidth: 0,
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
-              {slides.map((slideCards, slideIdx) => (
-                <Box
-                  key={slideIdx}
-                  sx={{
-                    flex: '0 0 100%',
-                    width: '100%',
-                    px: { xs: 1, sm: 0 },
-                  }}
-                >
-                  <Stack
-                    direction="row"
-                    spacing={2}
+              <Box
+                sx={{
+                  display: 'flex',
+                  transition: 'transform 0.4s ease-out',
+                  transform: `translateX(-${currentSlide * 100}%)`,
+                }}
+              >
+                {slides.map((slideCards, slideIdx) => (
+                  <Box
+                    key={slideIdx}
                     sx={{
-                      justifyContent: { xs: 'center', md: 'space-between' },
-                      flexWrap: 'nowrap',
-                      gap: 2,
+                      flex: '0 0 100%',
+                      width: '100%',
+                      px: { xs: 1, sm: 0 },
                     }}
                   >
-                    {slideCards.map((card) => {
-                      const Icon = card.icon;
-                      return (
-                        <Box
-                          key={card.id}
-                          sx={{
-                            flex: '1 1 0',
-                            minWidth: 0,
-                            maxWidth: { xs: '100%', md: '33.333%' },
-                          }}
-                        >
-                          <Card
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{
+                        justifyContent: { xs: 'center', md: 'space-between' },
+                        flexWrap: 'nowrap',
+                        gap: 2,
+                      }}
+                    >
+                      {slideCards.map((card) => {
+                        const Icon = card.icon;
+                        return (
+                          <Box
+                            key={card.id}
                             sx={{
-                              height: '100%',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
-                              border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
-                              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                              '&:hover': {
-                                transform: 'translateY(-4px)',
-                                boxShadow: 2,
-                              },
+                              flex: '1 1 0',
+                              minWidth: 0,
+                              maxWidth: { xs: '100%', md: '33.333%' },
                             }}
                           >
-                            <CardMedia
-                              component="img"
-                              image={card.image}
-                              alt={card.title}
-                              sx={{ objectFit: 'cover', height: { xs: 140, sm: 180, md: 200 } }}
-                            />
-                            <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5, md: 3 } }}>
-                              <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: 2 }}>
-                                <Icon
-                                  sx={{
-                                    fontSize: { xs: 32, sm: 36, md: 40 },
-                                    color: card.iconColor.startsWith('#')
-                                      ? card.iconColor
-                                      : (theme.palette[card.iconColor.split('.')[0]]?.main ?? theme.palette.primary.main),
-                                    mt: 0.5,
-                                    flexShrink: 0,
-                                  }}
-                                />
-                                <Box sx={{ flex: 1, minWidth: 0 }}>
-                                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                                    {card.title}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                                    {card.description}
-                                  </Typography>
-                                  {card.skills.length > 0 && (
-                                    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1, mt: 2 }}>
-                                      {card.skills.map((skill) => (
-                                        <Chip key={skill} label={skill} size="small" variant="outlined" />
-                                      ))}
-                                    </Stack>
-                                  )}
-                                </Box>
-                              </Stack>
-                            </CardContent>
-                          </Card>
-                        </Box>
-                      );
-                    })}
-                    {slideCards.length < CARDS_PER_SLIDE &&
-                      Array.from({ length: CARDS_PER_SLIDE - slideCards.length }).map((_, i) => (
-                        <Box key={`placeholder-${i}`} sx={{ flex: '1 1 0', minWidth: 0, maxWidth: { xs: '100%', md: '33.333%' } }} />
-                      ))}
-                  </Stack>
-                </Box>
-              ))}
+                            <Card
+                              sx={{
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
+                                border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+                                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                                '&:hover': {
+                                  transform: 'translateY(-4px)',
+                                  boxShadow: 2,
+                                },
+                              }}
+                            >
+                              <CardMedia
+                                component="img"
+                                image={card.image}
+                                alt={card.title}
+                                sx={{ objectFit: 'cover', height: { xs: 140, sm: 180, md: 200 } }}
+                              />
+                              <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5, md: 3 } }}>
+                                <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: 2 }}>
+                                  <Icon
+                                    sx={{
+                                      fontSize: { xs: 32, sm: 36, md: 40 },
+                                      color: card.iconColor.startsWith('#')
+                                        ? card.iconColor
+                                        : (theme.palette[card.iconColor.split('.')[0]]?.main ?? theme.palette.primary.main),
+                                      mt: 0.5,
+                                      flexShrink: 0,
+                                    }}
+                                  />
+                                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                                      {card.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+                                      {card.description}
+                                    </Typography>
+                                    {card.skills.length > 0 && (
+                                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1, mt: 2 }}>
+                                        {card.skills.map((skill) => (
+                                          <Chip key={skill} label={skill} size="small" variant="outlined" />
+                                        ))}
+                                      </Stack>
+                                    )}
+                                  </Box>
+                                </Stack>
+                              </CardContent>
+                            </Card>
+                          </Box>
+                        );
+                      })}
+                      {slideCards.length < CARDS_PER_SLIDE &&
+                        Array.from({ length: CARDS_PER_SLIDE - slideCards.length }).map((_, i) => (
+                          <Box key={`placeholder-${i}`} sx={{ flex: '1 1 0', minWidth: 0, maxWidth: { xs: '100%', md: '33.333%' } }} />
+                        ))}
+                    </Stack>
+                  </Box>
+                ))}
+              </Box>
             </Box>
+
+            {slides.length > 1 && (
+              <IconButton
+                onClick={goNext}
+                aria-label="Next"
+                sx={{
+                  flexShrink: 0,
+                  bgcolor: 'background.paper',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            )}
           </Box>
+        ) : (
+          <Box sx={{ maxWidth: 620, mx: 'auto' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <IconButton
+                onClick={goPrevMobile}
+                aria-label="Previous"
+                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                {currentMobile + 1} / {aboutCards.length}
+              </Typography>
+              <IconButton
+                onClick={goNextMobile}
+                aria-label="Next"
+                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </Box>
 
-          {slides.length > 1 && (
-            <IconButton
-              onClick={goNext}
-              aria-label="Next"
-              sx={{
-                flexShrink: 0,
-                bgcolor: 'background.paper',
-                boxShadow: 2,
-                '&:hover': { bgcolor: 'action.hover' },
-              }}
-            >
-              <ChevronRightIcon />
-            </IconButton>
-          )}
-        </Box>
+            {(() => {
+              const card = aboutCards[currentMobile];
+              const Icon = card.icon;
+              return (
+                <Card
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
+                    border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: 2,
+                    },
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={card.image}
+                    alt={card.title}
+                    sx={{ objectFit: 'cover', height: { xs: 160, sm: 200 } }}
+                  />
+                  <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5 } }}>
+                    <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: 2 }}>
+                      <Icon
+                        sx={{
+                          fontSize: { xs: 32, sm: 36 },
+                          color: card.iconColor.startsWith('#')
+                            ? card.iconColor
+                            : (theme.palette[card.iconColor.split('.')[0]]?.main ?? theme.palette.primary.main),
+                          mt: 0.5,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, fontSize: { xs: '1rem', sm: '1.15rem' } }}>
+                          {card.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+                          {card.description}
+                        </Typography>
+                        {card.skills.length > 0 && (
+                          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1, mt: { xs: 1.5, sm: 2 } }}>
+                            {card.skills.map((skill) => (
+                              <Chip key={skill} label={skill} size="small" variant="outlined" />
+                            ))}
+                          </Stack>
+                        )}
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              );
+            })()}
 
-        {slides.length > 1 && (
-        <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
-          {slides.map((_, idx) => (
-            <Box
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && setCurrentSlide(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              sx={{
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                bgcolor: currentSlide === idx ? 'primary.main' : 'action.selected',
-                cursor: 'pointer',
-                transition: 'transform 0.2s, background-color 0.2s',
-                '&:hover': { transform: 'scale(1.2)' },
-              }}
-            />
-          ))}
-        </Stack>
+            {aboutCards.length > 1 && (
+              <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
+                {aboutCards.map((_, idx) => (
+                  <Box
+                    key={idx}
+                    onClick={() => setCurrentMobile(idx)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && setCurrentMobile(idx)}
+                    aria-label={`Go to card ${idx + 1}`}
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      bgcolor: currentMobile === idx ? 'primary.main' : 'action.selected',
+                      cursor: 'pointer',
+                      transition: 'transform 0.2s, background-color 0.2s',
+                      '&:hover': { transform: 'scale(1.2)' },
+                    }}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Box>
+        )}
+
+        {isMdUp && slides.length > 1 && (
+          <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
+            {slides.map((_, idx) => (
+              <Box
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && setCurrentSlide(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  bgcolor: currentSlide === idx ? 'primary.main' : 'action.selected',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s, background-color 0.2s',
+                  '&:hover': { transform: 'scale(1.2)' },
+                }}
+              />
+            ))}
+          </Stack>
         )}
       </Box>
     </Container>

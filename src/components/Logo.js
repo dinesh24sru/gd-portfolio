@@ -31,7 +31,7 @@ const Logo = ({ variant: variantProp }) => {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     fontWeight: 800,
-    fontFamily: '"Poppins", sans-serif',
+    fontFamily: '"Sora", "Figtree", sans-serif',
   };
 
   // Option 1: Gradient box (current style, refined)
@@ -108,7 +108,7 @@ const Logo = ({ variant: variantProp }) => {
           fontSize: { xs: '15px', sm: '17px' },
           fontWeight: 700,
           letterSpacing: '0.5px',
-          fontFamily: '"Poppins", sans-serif',
+          fontFamily: '"Sora", "Figtree", sans-serif',
         }}
       >
         GD
@@ -188,7 +188,7 @@ const Logo = ({ variant: variantProp }) => {
           display: 'inline-flex',
           alignItems: 'center',
           cursor: 'pointer',
-          fontFamily: '"Poppins", sans-serif',
+          fontFamily: '"Sora", "Figtree", sans-serif',
           fontWeight: 700,
           fontSize: { xs: '18px', sm: '22px' },
           letterSpacing: '-0.5px',

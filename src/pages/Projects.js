@@ -256,7 +256,7 @@ const Projects = () => {
                     borderRadius: 2,
                     fontWeight: 700,
                     fontSize: '0.9rem',
-                    fontFamily: '"Poppins", sans-serif',
+                    fontFamily: '"Sora", "Figtree", sans-serif',
                     bgcolor: selected ? theme.palette.primary.main : surface,
                     color: selected ? '#fff' : theme.palette.text.primary,
                     border: `1px solid ${selected ? theme.palette.primary.main : surfaceBorder}`,

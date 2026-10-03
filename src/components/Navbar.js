@@ -116,7 +116,7 @@ const Navbar = () => {
                         color: '#fff',
                         fontWeight: active ? 700 : 500,
                         fontSize: '0.92rem',
-                        fontFamily: '"Poppins", sans-serif',
+                        fontFamily: '"Sora", "Figtree", sans-serif',
                         bgcolor: active ? 'rgba(255,255,255,0.22)' : 'transparent',
                         boxShadow: active ? '0 4px 14px rgba(0,0,0,0.12)' : 'none',
                         transition: 'background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease',
@@ -197,7 +197,7 @@ const Navbar = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography sx={{ fontWeight: 800, fontFamily: '"Poppins", sans-serif' }}>
+          <Typography sx={{ fontWeight: 800, fontFamily: '"Sora", "Figtree", sans-serif' }}>
             Navigate
           </Typography>
           <IconButton

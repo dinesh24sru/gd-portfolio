@@ -16,10 +16,11 @@ const PROJECTS_PER_SLIDE = 3;
 
 const projects = [
   {
-    title: 'E-Commerce Platform',
-    description: 'A full-stack e-commerce application built with React, Node.js, and MongoDB. Features include product catalog, shopping cart, and payment integration.',
-    link: 'https://github.com/yourusername/project-one',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=240&fit=crop',
+    title: 'GD RAG',
+    description:
+      'Multi-tenant, document-grounded RAG SaaS. Users upload documents and ask questions; answers are retrieved only from their tenant\'s docs, with abstention when evidence is weak. Next.js, Cognito, API Gateway, Lambda, S3, DynamoDB, SQS, Bedrock, and Qdrant.',
+    link: 'https://github.com/dinesh24sru/gd-rag-portfolio',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=240&fit=crop',
   },
   {
     title: 'Task Management App',

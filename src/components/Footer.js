@@ -11,13 +11,13 @@ const Footer = () => {
     component="footer"
     sx={{
       background: theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
-        : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-      color: theme.palette.mode === 'dark' ? '#f1f5f9' : 'white',
+        ? 'linear-gradient(135deg, #3A525C 0%, #2C3E46 100%)'
+        : 'linear-gradient(135deg, #DD6E42 0%, #4F6D7A 100%)',
+      color: theme.palette.mode === 'dark' ? '#E8DAB2' : 'white',
       py: { xs: 3, sm: 4 },
       mt: { xs: 4, sm: 6 },
       px: { xs: 2, sm: 0 },
-      boxShadow: theme.palette.mode === 'dark' ? '0 -4px 20px rgba(0,0,0,0.5)' : '0 -4px 20px rgba(99,102,241,0.3)',
+      boxShadow: theme.palette.mode === 'dark' ? '0 -4px 20px rgba(0,0,0,0.5)' : '0 -4px 20px rgba(221,110,66,0.3)',
     }}
   >
     <Container maxWidth="lg">

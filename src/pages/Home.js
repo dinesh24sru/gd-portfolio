@@ -39,7 +39,7 @@ const pulse = {
 const highlights = [
   { icon: CodeIcon, label: 'Full Stack', value: 'React · Node · AWS', to: '/projects', color: 'primary' },
   { icon: CloudIcon, label: 'Cloud & AI', value: 'Serverless · RAG · Agentic', to: '/about', color: 'secondary' },
-  { icon: LocationOnIcon, label: 'Based in', value: 'Gaithersburg, MD', to: '/contact', color: '#10b981' },
+  { icon: LocationOnIcon, label: 'Based in', value: 'Gaithersburg, MD', to: '/contact', color: '#4F6D7A' },
 ];
 
 const Home = () => {
@@ -111,8 +111,8 @@ const Home = () => {
 
       ctx.clearRect(0, 0, width, height);
 
-      const base = '148,163,184';
-      const accent = theme.palette.mode === 'dark' ? '129,140,248' : '79,70,229';
+      const base = '192,214,223';
+      const accent = theme.palette.mode === 'dark' ? '221,110,66' : '79,109,122';
 
       if (!prefersReducedMotion && ts - lastPulse > PULSE_INTERVAL && agents.length) {
         lastPulse = ts;
@@ -206,12 +206,12 @@ const Home = () => {
         <svg width="100%" height="100%" viewBox="0 0 1200 700" preserveAspectRatio="none">
           <defs>
             <linearGradient id="cgrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#6366f1" stopOpacity="0.7" />
-              <stop offset="1" stopColor="#ec4899" stopOpacity="0.5" />
+              <stop offset="0" stopColor="#DD6E42" stopOpacity="0.7" />
+              <stop offset="1" stopColor="#4F6D7A" stopOpacity="0.5" />
             </linearGradient>
           </defs>
 
-          <g fill="none" stroke="rgba(148,163,184,0.45)" strokeWidth="2">
+          <g fill="none" stroke="rgba(79,109,122,0.45)" strokeWidth="2">
             <path d="M70 90 H340 V160 H540 V240 H780" />
             <path d="M150 520 H360 V430 H520 V360 H700 V280 H1120" />
             <path d="M90 300 H280 V340 H430 V420 H620" />
@@ -228,7 +228,7 @@ const Home = () => {
             </path>
           </g>
 
-          <g fill="rgba(99,102,241,0.7)">
+          <g fill="rgba(221,110,66,0.7)">
             <circle cx="70" cy="90" r="5" />
             <circle cx="340" cy="90" r="5" />
             <circle cx="340" cy="160" r="5" />
@@ -387,8 +387,8 @@ const Home = () => {
                     p: { xs: 2, sm: 2.5 },
                     textDecoration: 'none',
                     color: 'inherit',
-                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(248, 250, 252, 0.9)',
-                    border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(58, 82, 92, 0.8)' : 'rgba(192, 214, 223, 0.9)',
+                    border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
                     transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
                     transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
                     boxShadow: isHovered ? 3 : 0,

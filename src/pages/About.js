@@ -50,7 +50,7 @@ const aboutCards = [
     description: 'Specialized in AWS solutions, serverless architectures, and emerging technologies like RAG and Agentic AI. Committed to clean code and continuous learning.',
     image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=340&fit=crop',
     icon: WorkspacePremiumIcon,
-    iconColor: '#0ea5e9',
+    iconColor: '#4F6D7A',
     skills: ['AWS', 'Serverless', 'RAG', 'Agentic AI', 'Clean Code'],
   },
   {
@@ -77,7 +77,7 @@ const aboutCards = [
     description: 'Designing and implementing enterprise-grade cloud solutions with AWS expertise and serverless architectures.',
     image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=340&fit=crop',
     icon: CloudIcon,
-    iconColor: '#f59e0b',
+    iconColor: '#DD6E42',
     skills: ['AWS', 'Serverless', 'Lambda', 'API Gateway'],
   },
   {
@@ -86,7 +86,7 @@ const aboutCards = [
     description: 'Expert in designing and managing both relational and NoSQL databases for optimal performance.',
     image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&h=340&fit=crop',
     icon: BuildIcon,
-    iconColor: '#8b5cf6',
+    iconColor: '#4F6D7A',
     skills: ['PostgreSQL', 'MongoDB', 'DynamoDB'],
   },
   {
@@ -95,7 +95,7 @@ const aboutCards = [
     description: 'Leveraging cutting-edge AI technologies to build intelligent solutions and autonomous systems.',
     image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=340&fit=crop',
     icon: SmartToyIcon,
-    iconColor: '#06b6d4',
+    iconColor: '#3A525C',
     skills: ['RAG', 'AI', 'Agentic AI'],
   },
   {
@@ -104,7 +104,7 @@ const aboutCards = [
     description: 'Building developer platforms and tools that enhance productivity and streamline workflows.',
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=340&fit=crop',
     icon: SchoolIcon,
-    iconColor: '#10b981',
+    iconColor: '#DD6E42',
     skills: ['Backstage.io'],
   },
 ];
@@ -236,8 +236,8 @@ const About = () => {
                                 height: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
-                                border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+                                backgroundColor: theme.palette.mode === 'dark' ? '#3A525C' : '#C0D6DF',
+                                border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
                                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                                 '&:hover': {
                                   transform: 'translateY(-4px)',
@@ -340,8 +340,8 @@ const About = () => {
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
-                    border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+                    backgroundColor: theme.palette.mode === 'dark' ? '#3A525C' : '#C0D6DF',
+                    border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                     '&:hover': {
                       transform: 'translateY(-4px)',

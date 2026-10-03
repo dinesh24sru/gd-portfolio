@@ -20,22 +20,22 @@ export const ThemeContextProvider = ({ children }) => {
         palette: {
           mode: isDarkMode ? 'dark' : 'light',
           primary: {
-            main: '#6366f1',
-            light: '#818cf8',
-            dark: '#4f46e5',
+            main: '#DD6E42',
+            light: '#E8916A',
+            dark: '#C45A30',
           },
           secondary: {
-            main: '#ec4899',
-            light: '#f472b6',
-            dark: '#db2777',
+            main: '#4F6D7A',
+            light: '#6B8A96',
+            dark: '#3A525C',
           },
           background: {
-            default: isDarkMode ? '#0f172a' : '#ffffff',
-            paper: isDarkMode ? '#1e293b' : '#f8fafc',
+            default: isDarkMode ? '#2C3E46' : '#E8DAB2',
+            paper: isDarkMode ? '#3A525C' : '#C0D6DF',
           },
           text: {
-            primary: isDarkMode ? '#f1f5f9' : '#0f172a',
-            secondary: isDarkMode ? '#cbd5e1' : '#64748b',
+            primary: isDarkMode ? '#E8DAB2' : '#2C3E46',
+            secondary: isDarkMode ? '#C0D6DF' : '#4F6D7A',
           },
         },
         typography: {
@@ -99,7 +99,7 @@ export const ThemeContextProvider = ({ children }) => {
             styleOverrides: {
               root: {
                 borderRadius: 12,
-                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                border: isDarkMode ? '1px solid #4F6D7A' : '1px solid #C0D6DF',
               },
             },
           },
@@ -107,9 +107,9 @@ export const ThemeContextProvider = ({ children }) => {
             styleOverrides: {
               root: {
                 background: isDarkMode
-                  ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
-                  : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                boxShadow: isDarkMode ? '0 4px 20px rgba(0,0,0,0.5)' : '0 4px 20px rgba(99,102,241,0.3)',
+                  ? 'linear-gradient(135deg, #3A525C 0%, #2C3E46 100%)'
+                  : 'linear-gradient(135deg, #DD6E42 0%, #4F6D7A 100%)',
+                boxShadow: isDarkMode ? '0 4px 20px rgba(0,0,0,0.5)' : '0 4px 20px rgba(221,110,66,0.3)',
               },
             },
           },

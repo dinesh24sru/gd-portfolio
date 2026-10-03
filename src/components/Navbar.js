@@ -119,8 +119,8 @@ const Navbar = () => {
           sx: {
             width: { xs: '80%', sm: 280 },
             background: theme.palette.mode === 'dark'
-              ? 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)'
-              : 'linear-gradient(180deg, #6366f1 0%, #4f46e5 100%)',
+              ? 'linear-gradient(180deg, #3A525C 0%, #2C3E46 100%)'
+              : 'linear-gradient(180deg, #DD6E42 0%, #4F6D7A 100%)',
             color: 'white',
           },
         }}

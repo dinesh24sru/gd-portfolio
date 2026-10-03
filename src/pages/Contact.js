@@ -53,8 +53,8 @@ const Contact = () => {
         <Paper
           sx={{
             p: { xs: 2.5, sm: 3, md: 4 },
-            backgroundColor: theme.palette.mode === 'dark' ? '#1e293b' : '#f8fafc',
-            border: `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#e2e8f0'}`,
+            backgroundColor: theme.palette.mode === 'dark' ? '#3A525C' : '#C0D6DF',
+            border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
           }}
         >
           <Stack spacing={3}>
@@ -81,7 +81,7 @@ const Contact = () => {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2, sm: 3 }, flexWrap: 'wrap' }}>
-              <PhoneIcon sx={{ color: theme.palette.secondary.main, fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
+              <PhoneIcon sx={{ color: theme.palette.primary.main, fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
                   Phone
@@ -90,7 +90,7 @@ const Contact = () => {
                   href="tel:+16108646561"
                   sx={{
                     fontSize: { xs: '0.95rem', sm: '1.1rem' },
-                    color: theme.palette.secondary.main,
+                    color: theme.palette.primary.main,
                     fontWeight: 500,
                     textDecoration: 'none',
                     '&:hover': { textDecoration: 'underline' },
@@ -102,7 +102,7 @@ const Contact = () => {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2, sm: 3 }, flexWrap: 'wrap' }}>
-              <LocationOnIcon sx={{ color: '#10b981', fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
+              <LocationOnIcon sx={{ color: '#4F6D7A', fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
                   Location
@@ -114,7 +114,7 @@ const Contact = () => {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2, sm: 3 }, flexWrap: 'wrap' }}>
-              <LinkedInIcon sx={{ color: '#0a66c2', fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
+              <LinkedInIcon sx={{ color: theme.palette.primary.main, fontSize: { xs: 28, sm: 35 }, flexShrink: 0 }} />
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 0.5 }}>
                   LinkedIn
@@ -125,7 +125,7 @@ const Contact = () => {
                   rel="noopener noreferrer"
                   sx={{
                     fontSize: { xs: '0.95rem', sm: '1.1rem' },
-                    color: '#0a66c2',
+                    color: theme.palette.primary.main,
                     fontWeight: 500,
                     textDecoration: 'none',
                     '&:hover': { textDecoration: 'underline' },

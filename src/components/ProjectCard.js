@@ -48,7 +48,7 @@ const ProjectCard = ({ project }) => (
         target="_blank"
         rel="noopener noreferrer"
         endIcon={<OpenInNewIcon />}
-        sx={{ color: '#1976d2', fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+        sx={{ color: 'primary.main', fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
       >
         View Project
       </Button>

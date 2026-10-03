@@ -14,9 +14,27 @@ function App() {
     <ThemeContextProvider>
       <CssBaseline />
       <Router>
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+            overflowX: 'hidden',
+            width: '100%',
+          }}
+        >
           <Navbar />
-          <Box component="main" sx={{ flex: 1, py: { xs: 2, sm: 3, md: 4 }, px: { xs: 0, sm: 0 } }}>
+          <Box
+            component="main"
+            sx={{
+              flex: 1,
+              py: { xs: 2, sm: 3, md: 4 },
+              px: 0,
+              width: '100%',
+              maxWidth: '100%',
+              overflowX: 'hidden',
+            }}
+          >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />

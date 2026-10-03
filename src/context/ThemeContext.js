@@ -92,6 +92,15 @@ export const ThemeContextProvider = ({ children }) => {
                 borderRadius: 8,
                 padding: '10px 24px',
                 fontSize: '0.95rem',
+                minHeight: 44,
+              },
+            },
+          },
+          MuiIconButton: {
+            styleOverrides: {
+              root: {
+                minWidth: 44,
+                minHeight: 44,
               },
             },
           },

@@ -7,53 +7,101 @@ import {
   Stack,
   Button,
   useTheme,
-  Paper,
+  keyframes,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CodeIcon from '@mui/icons-material/Code';
 import CloudIcon from '@mui/icons-material/Cloud';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import NorthEastIcon from '@mui/icons-material/NorthEast';
 
-const fadeInUp = {
-  '@keyframes fadeInUp': {
-    '0%': { opacity: 0, transform: 'translateY(24px)' },
-    '100%': { opacity: 1, transform: 'translateY(0)' },
-  },
-};
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-const float = {
-  '@keyframes float': {
-    '0%, 100%': { transform: 'translateY(0)' },
-    '50%': { transform: 'translateY(-8px)' },
-  },
-};
+const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+`;
 
-const pulse = {
-  '@keyframes pulse': {
-    '0%, 100%': { opacity: 1 },
-    '50%': { opacity: 0.7 },
-  },
-};
+const drift = keyframes`
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(16px, -12px) scale(1.05); }
+`;
+
+const pulseRing = keyframes`
+  0% { transform: scale(0.85); opacity: 0.55; }
+  70% { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+`;
+
+const roles = [
+  'Solutions Architect',
+  'AI Enthusiast',
+  'Full Stack Developer',
+];
 
 const highlights = [
-  { icon: CodeIcon, label: 'Full Stack', value: 'React · Node · AWS', to: '/projects', color: 'primary' },
-  { icon: CloudIcon, label: 'Cloud & AI', value: 'Serverless · RAG · Agentic', to: '/about', color: 'secondary' },
-  { icon: LocationOnIcon, label: 'Based in', value: 'Gaithersburg, MD', to: '/contact', color: '#4F6D7A' },
+  {
+    icon: CodeIcon,
+    label: 'Full Stack',
+    value: 'React · Node · AWS',
+    to: '/projects',
+    hint: 'See selected builds',
+  },
+  {
+    icon: CloudIcon,
+    label: 'Cloud & AI',
+    value: 'Serverless · RAG · Agentic',
+    to: '/about',
+    hint: 'Explore my focus areas',
+  },
+  {
+    icon: LocationOnIcon,
+    label: 'Based in',
+    value: 'Gaithersburg, MD',
+    to: '/contact',
+    hint: 'Say hello anytime',
+  },
 ];
 
 const Home = () => {
   const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [roleVisible, setRoleVisible] = useState(true);
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    )?.matches;
+    if (prefersReducedMotion) return undefined;
+
+    const timer = window.setInterval(() => {
+      setRoleVisible(false);
+      window.setTimeout(() => {
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+        setRoleVisible(true);
+      }, 220);
+    }, 2600);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
 
     const ctx = canvas.getContext('2d');
     let rafId;
-    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    const prefersReducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    )?.matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const particles = [];
@@ -74,12 +122,12 @@ const Home = () => {
 
       const baseDensity = (width * height) / 14000;
       const density =
-        width < 600 ? baseDensity * 0.6 : width < 900 ? baseDensity * 0.85 : baseDensity;
+        width < 600 ? baseDensity * 0.55 : width < 900 ? baseDensity * 0.8 : baseDensity;
 
       const target = Math.floor(density);
 
       for (let i = 0; i < target; i++) {
-        const p = {
+        particles.push({
           x: rand(0, width),
           y: rand(0, height),
           vx: rand(-0.3, 0.3),
@@ -87,8 +135,7 @@ const Home = () => {
           r: rand(1.2, 2.4),
           a: rand(0.4, 0.9),
           agent: false,
-        };
-        particles.push(p);
+        });
       }
 
       for (let i = 0; i < Math.min(4, particles.length); i++) {
@@ -178,8 +225,39 @@ const Home = () => {
     };
   }, [theme.palette.mode]);
 
+  const surface = isDark ? 'rgba(58, 82, 92, 0.75)' : 'rgba(255, 255, 255, 0.55)';
+  const surfaceBorder = isDark ? 'rgba(192, 214, 223, 0.22)' : 'rgba(79, 109, 122, 0.28)';
+  const glow = isDark ? 'rgba(221, 110, 66, 0.28)' : 'rgba(221, 110, 66, 0.2)';
+
   return (
-    <Box sx={{ ...fadeInUp, ...float, ...pulse, position: 'relative', overflow: 'hidden' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        overflow: 'hidden',
+        my: { xs: -2, sm: -3, md: -4 },
+        minHeight: { md: '78vh' },
+        background: isDark
+          ? 'radial-gradient(ellipse at 50% 0%, #3A525C 0%, #2C3E46 50%, #24343b 100%)'
+          : 'radial-gradient(ellipse at 50% 0%, #F3E9D0 0%, #E8DAB2 45%, #C0D6DF 100%)',
+      }}
+    >
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          width: { xs: 220, md: 360 },
+          height: { xs: 220, md: 360 },
+          borderRadius: '50%',
+          top: { xs: -70, md: -90 },
+          left: { xs: '50%', md: '18%' },
+          transform: 'translateX(-50%)',
+          background: `radial-gradient(circle, ${theme.palette.primary.main}45 0%, transparent 70%)`,
+          animation: `${drift} 13s ease-in-out infinite`,
+          pointerEvents: 'none',
+          filter: 'blur(4px)',
+        }}
+      />
+
       <Box
         component="canvas"
         ref={canvasRef}
@@ -190,58 +268,9 @@ const Home = () => {
           height: '100%',
           zIndex: 0,
           pointerEvents: 'none',
-          opacity: { xs: 0.22, sm: 0.3, md: 0.35 },
+          opacity: { xs: 0.2, sm: 0.28, md: 0.32 },
         }}
       />
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: { xs: 0.18, sm: 0.22 },
-          mixBlendMode: theme.palette.mode === 'dark' ? 'screen' : 'multiply',
-        }}
-      >
-        <svg width="100%" height="100%" viewBox="0 0 1200 700" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="cgrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#DD6E42" stopOpacity="0.7" />
-              <stop offset="1" stopColor="#4F6D7A" stopOpacity="0.5" />
-            </linearGradient>
-          </defs>
-
-          <g fill="none" stroke="rgba(79,109,122,0.45)" strokeWidth="2">
-            <path d="M70 90 H340 V160 H540 V240 H780" />
-            <path d="M150 520 H360 V430 H520 V360 H700 V280 H1120" />
-            <path d="M90 300 H280 V340 H430 V420 H620" />
-            <path d="M820 560 V420 H980 V360 H1120" />
-            <path d="M540 240 H620 V180 H760" />
-          </g>
-
-          <g fill="none" stroke="url(#cgrad)" strokeWidth="2.5" strokeDasharray="10 14" opacity="0.65">
-            <path d="M70 90 H340 V160 H540 V240 H780">
-              <animate attributeName="stroke-dashoffset" from="0" to="-220" dur="7s" repeatCount="indefinite" />
-            </path>
-            <path d="M150 520 H360 V430 H520 V360 H700 V280 H1120">
-              <animate attributeName="stroke-dashoffset" from="0" to="-260" dur="9s" repeatCount="indefinite" />
-            </path>
-          </g>
-
-          <g fill="rgba(221,110,66,0.7)">
-            <circle cx="70" cy="90" r="5" />
-            <circle cx="340" cy="90" r="5" />
-            <circle cx="340" cy="160" r="5" />
-            <circle cx="540" cy="160" r="5" />
-            <circle cx="540" cy="240" r="5" />
-            <circle cx="780" cy="240" r="5" />
-            <circle cx="1120" cy="280" r="5" />
-            <circle cx="150" cy="520" r="5" />
-            <circle cx="980" cy="360" r="5" />
-            <circle cx="1120" cy="360" r="5" />
-          </g>
-        </svg>
-      </Box>
 
       <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
         <Box
@@ -254,73 +283,130 @@ const Home = () => {
             px: { xs: 2, sm: 3 },
           }}
         >
-          <Avatar
-            src="/profile.jpg"
-            alt="Profile"
+          <Box
             sx={{
-              width: { xs: 160, sm: 200, md: 250 },
-              height: { xs: 160, sm: 200, md: 250 },
-              mb: { xs: 2, sm: 3 },
-              boxShadow: 3,
-              border: `4px solid ${theme.palette.primary.main}`,
-              animation: 'float 4s ease-in-out infinite',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.03)',
-                boxShadow: 6,
-              },
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              mb: 2.5,
+              color: theme.palette.text.secondary,
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              animation: `${fadeUp} 0.5s ease-out both`,
             }}
-          />
+          >
+            <Box sx={{ position: 'relative', width: 12, height: 12 }}>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '50%',
+                  bgcolor: '#7CB518',
+                  animation: `${pulseRing} 2s ease-out infinite`,
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  inset: 2,
+                  borderRadius: '50%',
+                  bgcolor: '#7CB518',
+                }}
+              />
+            </Box>
+            Open to opportunities
+          </Box>
+
+          <Box
+            sx={{
+              position: 'relative',
+              mb: { xs: 2.5, sm: 3 },
+              animation: `${fadeUp} 0.55s ease-out 0.05s both`,
+            }}
+          >
+            <Box
+              aria-hidden
+              sx={{
+                position: 'absolute',
+                inset: { xs: -10, sm: -14 },
+                borderRadius: '50%',
+                background: `conic-gradient(from 180deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`,
+                opacity: 0.55,
+                filter: 'blur(1px)',
+                animation: `${float} 5s ease-in-out infinite`,
+              }}
+            />
+            <Avatar
+              src="/profile.jpg"
+              alt="Dinesh Ganesan"
+              sx={{
+                position: 'relative',
+                width: { xs: 150, sm: 190, md: 230 },
+                height: { xs: 150, sm: 190, md: 230 },
+                border: `4px solid ${isDark ? '#2C3E46' : '#E8DAB2'}`,
+                boxShadow: `0 16px 40px ${glow}`,
+                animation: `${float} 4s ease-in-out infinite`,
+                transition: 'transform 0.3s ease',
+                '@media (hover: hover)': {
+                  '&:hover': { transform: 'scale(1.03)' },
+                },
+              }}
+            />
+          </Box>
+
           <Typography
             variant="h3"
             component="h1"
             sx={{
               fontWeight: 800,
-              mb: 2,
-              fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+              mb: 1.25,
+              fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3.2rem' },
               background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              animation: 'fadeInUp 0.6s ease-out 0.2s both',
+              animation: `${fadeUp} 0.55s ease-out 0.12s both`,
             }}
           >
             Dinesh Ganesan
           </Typography>
+
           <Typography
-            variant="h5"
             color="text.secondary"
             sx={{
-              mb: 3,
-              fontWeight: 500,
-              fontSize: { xs: '1rem', sm: '1.15rem', md: '1.25rem' },
-              animation: 'fadeInUp 0.6s ease-out 0.35s both',
+              mb: 2.5,
+              minHeight: { xs: 48, sm: 36 },
+              fontWeight: 600,
+              fontSize: { xs: '1.05rem', sm: '1.25rem' },
+              opacity: roleVisible ? 1 : 0,
+              transform: roleVisible ? 'translateY(0)' : 'translateY(6px)',
+              transition: 'opacity 0.2s ease, transform 0.2s ease',
+              animation: `${fadeUp} 0.55s ease-out 0.18s both`,
             }}
           >
-            Solutions Architect | AI Enthusiast | Full Stack Developer
+            {roles[roleIndex]}
           </Typography>
+
           <Typography
-            variant="body1"
             sx={{
-              mb: 4,
-              maxWidth: 600,
+              mb: 3.5,
+              maxWidth: 560,
               lineHeight: 1.8,
               color: theme.palette.text.primary,
-              fontSize: { xs: '0.95rem', sm: '1rem' },
-              px: { xs: 0, sm: 1 },
-              animation: 'fadeInUp 0.6s ease-out 0.5s both',
+              fontSize: { xs: '0.95rem', sm: '1.05rem' },
+              animation: `${fadeUp} 0.55s ease-out 0.24s both`,
             }}
           >
-            Welcome to my portfolio! I am a passionate developer with expertise in building
-            modern web applications. Explore my projects, learn about my skills, and feel free
-            to get in touch!
+            Building scalable cloud systems and AI-powered products — from serverless backends to
+            document-grounded RAG experiences.
           </Typography>
+
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={2}
             sx={{
               width: { xs: '100%', sm: 'auto' },
-              animation: 'fadeInUp 0.6s ease-out 0.65s both',
+              animation: `${fadeUp} 0.55s ease-out 0.3s both`,
             }}
           >
             <Button
@@ -330,13 +416,13 @@ const Home = () => {
               to="/projects"
               endIcon={<ArrowForwardIcon />}
               sx={{
-                minWidth: { xs: '100%', sm: 160 },
-                py: { xs: 1.25, sm: 1.5 },
-                fontSize: { xs: '0.9rem', sm: '0.95rem' },
+                minWidth: { xs: '100%', sm: 180 },
+                minHeight: 48,
+                boxShadow: `0 12px 28px ${glow}`,
                 transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                 '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: 4,
+                  transform: 'translateY(-3px)',
+                  boxShadow: `0 16px 34px ${glow}`,
                 },
               }}
             >
@@ -347,13 +433,16 @@ const Home = () => {
               size="large"
               component={RouterLink}
               to="/contact"
+              startIcon={<ChatBubbleOutlineIcon />}
               sx={{
-                minWidth: { xs: '100%', sm: 160 },
-                py: { xs: 1.25, sm: 1.5 },
-                fontSize: { xs: '0.9rem', sm: '0.95rem' },
+                minWidth: { xs: '100%', sm: 180 },
+                minHeight: 48,
+                bgcolor: surface,
+                borderColor: surfaceBorder,
                 transition: 'transform 0.2s ease',
                 '&:hover': {
-                  transform: 'translateY(-2px)',
+                  transform: 'translateY(-3px)',
+                  borderColor: theme.palette.primary.main,
                 },
               }}
             >
@@ -362,53 +451,87 @@ const Home = () => {
           </Stack>
 
           <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={{ xs: 2, sm: 3 }}
+            spacing={1.25}
             sx={{
               mt: { xs: 5, sm: 6 },
               width: '100%',
               maxWidth: 640,
-              animation: 'fadeInUp 0.6s ease-out 0.8s both',
+              animation: `${fadeUp} 0.55s ease-out 0.38s both`,
             }}
           >
             {highlights.map((item, idx) => {
               const Icon = item.icon;
               const isHovered = hoveredCard === idx;
               return (
-                <Paper
-                  key={idx}
+                <Box
+                  key={item.label}
                   component={RouterLink}
                   to={item.to}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
+                  onTouchStart={() => setHoveredCard(idx)}
+                  onTouchEnd={() => setHoveredCard(null)}
                   sx={{
-                    flex: 1,
-                    minWidth: 0,
-                    p: { xs: 2, sm: 2.5 },
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: { xs: 1.5, sm: 2 },
+                    p: { xs: 1.75, sm: 2 },
+                    minHeight: 72,
                     textDecoration: 'none',
                     color: 'inherit',
-                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(58, 82, 92, 0.8)' : 'rgba(192, 214, 223, 0.9)',
-                    border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
+                    borderRadius: 2.5,
+                    backgroundColor: surface,
+                    border: `1px solid ${isHovered ? theme.palette.primary.main : surfaceBorder}`,
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: isHovered ? `0 12px 28px ${glow}` : 'none',
+                    transform: isHovered ? 'translateY(-3px)' : 'translateY(0)',
                     transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
-                    transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-                    boxShadow: isHovered ? 3 : 0,
-                    borderColor: isHovered ? (item.color === 'primary' ? theme.palette.primary.main : item.color === 'secondary' ? theme.palette.secondary.main : item.color) : undefined,
+                    '&:active': { transform: 'translateY(-1px)' },
                   }}
                 >
-                  <Icon
+                  <Box
                     sx={{
-                      fontSize: { xs: 28, sm: 32 },
-                      color: item.color === 'primary' ? theme.palette.primary.main : item.color === 'secondary' ? theme.palette.secondary.main : item.color,
-                      mb: 1,
+                      width: 48,
+                      height: 48,
+                      borderRadius: 2,
+                      display: 'grid',
+                      placeItems: 'center',
+                      flexShrink: 0,
+                      background: isHovered
+                        ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
+                        : isDark
+                          ? 'rgba(44, 62, 70, 0.85)'
+                          : 'rgba(232, 218, 178, 0.9)',
+                      color: isHovered ? '#fff' : theme.palette.primary.main,
+                      transition: 'background 0.25s ease, color 0.25s ease',
+                    }}
+                  >
+                    <Icon />
+                  </Box>
+                  <Box sx={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                    <Typography sx={{ fontWeight: 700, fontSize: { xs: '0.95rem', sm: '1.05rem' } }}>
+                      {item.label}
+                    </Typography>
+                    <Typography color="text.secondary" sx={{ fontSize: { xs: '0.8rem', sm: '0.9rem' } }}>
+                      {item.value}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ opacity: isHovered ? 1 : 0.7 }}
+                    >
+                      {item.hint}
+                    </Typography>
+                  </Box>
+                  <NorthEastIcon
+                    sx={{
+                      color: theme.palette.primary.main,
+                      opacity: isHovered ? 1 : 0.5,
+                      transform: isHovered ? 'translate(2px, -2px)' : 'none',
+                      transition: 'opacity 0.2s ease, transform 0.2s ease',
                     }}
                   />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: { xs: '0.8rem', sm: '0.85rem' } }}>
-                    {item.label}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8rem' } }}>
-                    {item.value}
-                  </Typography>
-                </Paper>
+                </Box>
               );
             })}
           </Stack>

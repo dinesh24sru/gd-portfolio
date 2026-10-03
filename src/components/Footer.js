@@ -37,6 +37,8 @@ const Footer = () => {
             alignItems: 'center',
             color: 'inherit',
             fontSize: { xs: '0.9rem', sm: '1rem' },
+            minHeight: 44,
+            px: 1,
             '&:hover': { color: theme.palette.secondary.main },
           }}
         >
@@ -52,6 +54,8 @@ const Footer = () => {
             alignItems: 'center',
             color: 'inherit',
             fontSize: { xs: '0.9rem', sm: '1rem' },
+            minHeight: 44,
+            px: 1,
             '&:hover': { color: theme.palette.secondary.main },
           }}
         >

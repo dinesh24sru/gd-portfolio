@@ -7,10 +7,7 @@ import {
   useTheme,
   Chip,
   IconButton,
-  Card,
-  CardMedia,
-  CardContent,
-  useMediaQuery,
+  keyframes,
 } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -20,425 +17,498 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import BuildIcon from '@mui/icons-material/Build';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import SchoolIcon from '@mui/icons-material/School';
-import PersonIcon from '@mui/icons-material/Person';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
-const AUTO_ADVANCE_MS = 5000;
-const CARDS_PER_SLIDE = 3;
+const AUTO_ADVANCE_MS = 6000;
 
-const chunk = (arr, size) => {
-  const chunks = [];
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size));
-  }
-  return chunks;
-};
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-const aboutCards = [
-  {
-    id: 'intro',
-    title: 'Full Stack Developer & Cloud Architect',
-    description: 'Passionate full-stack developer building scalable, modern applications. I focus on cloud architecture, AI/ML integration, and backend development to drive business value and user satisfaction.',
-    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=340&fit=crop',
-    icon: PersonIcon,
-    iconColor: 'primary.main',
-    skills: [],
-  },
+const drift = keyframes`
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(16px, -12px) scale(1.05); }
+`;
+
+const panelIn = keyframes`
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+`;
+
+const skillPop = keyframes`
+  from { opacity: 0; transform: translateY(8px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+`;
+
+const domains = [
   {
     id: 'focus',
-    title: 'My Focus & Approach',
-    description: 'Specialized in AWS solutions, serverless architectures, and emerging technologies like RAG and Agentic AI. Committed to clean code and continuous learning.',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=340&fit=crop',
+    title: 'Focus & Approach',
+    short: 'Approach',
+    description:
+      'Specialized in AWS solutions, serverless architectures, and emerging technologies like RAG and Agentic AI. Committed to clean code and continuous learning.',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=520&fit=crop',
     icon: WorkspacePremiumIcon,
-    iconColor: '#4F6D7A',
     skills: ['AWS', 'Serverless', 'RAG', 'Agentic AI', 'Clean Code'],
   },
   {
     id: 'frontend',
     title: 'Frontend Development',
-    description: 'Building responsive, interactive, and beautiful user interfaces with modern web technologies.',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=340&fit=crop',
+    short: 'Frontend',
+    description:
+      'Building responsive, interactive, and beautiful user interfaces with modern web technologies.',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=900&h=520&fit=crop',
     icon: CodeIcon,
-    iconColor: 'primary.main',
     skills: ['React.js', 'HTML', 'CSS', 'Material-UI'],
   },
   {
     id: 'backend',
     title: 'Backend Development',
-    description: 'Creating robust, scalable server-side applications with modern frameworks and architectures.',
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=340&fit=crop',
+    short: 'Backend',
+    description:
+      'Creating robust, scalable server-side applications with modern frameworks and architectures.',
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=900&h=520&fit=crop',
     icon: StorageIcon,
-    iconColor: 'secondary.main',
     skills: ['Node.js', 'Java Spring Boot'],
   },
   {
     id: 'cloud',
-    title: 'Cloud & AWS Solutions Architecture',
-    description: 'Designing and implementing enterprise-grade cloud solutions with AWS expertise and serverless architectures.',
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=340&fit=crop',
+    title: 'Cloud & AWS Architecture',
+    short: 'Cloud',
+    description:
+      'Designing and implementing enterprise-grade cloud solutions with AWS expertise and serverless architectures.',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&h=520&fit=crop',
     icon: CloudIcon,
-    iconColor: '#DD6E42',
     skills: ['AWS', 'Serverless', 'Lambda', 'API Gateway'],
   },
   {
     id: 'databases',
-    title: 'Database & Data Management',
-    description: 'Expert in designing and managing both relational and NoSQL databases for optimal performance.',
-    image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&h=340&fit=crop',
+    title: 'Database & Data',
+    short: 'Data',
+    description:
+      'Expert in designing and managing both relational and NoSQL databases for optimal performance.',
+    image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=900&h=520&fit=crop',
     icon: BuildIcon,
-    iconColor: '#4F6D7A',
     skills: ['PostgreSQL', 'MongoDB', 'DynamoDB'],
   },
   {
     id: 'ai',
-    title: 'AI & Emerging Technologies',
-    description: 'Leveraging cutting-edge AI technologies to build intelligent solutions and autonomous systems.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=340&fit=crop',
+    title: 'AI & Emerging Tech',
+    short: 'AI',
+    description:
+      'Leveraging cutting-edge AI technologies to build intelligent solutions and autonomous systems.',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&h=520&fit=crop',
     icon: SmartToyIcon,
-    iconColor: '#3A525C',
     skills: ['RAG', 'AI', 'Agentic AI'],
   },
   {
     id: 'tools',
-    title: 'Developer Tools & Platforms',
-    description: 'Building developer platforms and tools that enhance productivity and streamline workflows.',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=340&fit=crop',
+    title: 'Developer Platforms',
+    short: 'Tools',
+    description:
+      'Building developer platforms and tools that enhance productivity and streamline workflows.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&h=520&fit=crop',
     icon: SchoolIcon,
-    iconColor: '#DD6E42',
     skills: ['Backstage.io'],
   },
 ];
 
 const About = () => {
   const theme = useTheme();
-  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
-  const slides = chunk(aboutCards, CARDS_PER_SLIDE);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentMobile, setCurrentMobile] = useState(0);
+  const isDark = theme.palette.mode === 'dark';
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [panelKey, setPanelKey] = useState(0);
+
+  const active = domains[activeIndex];
+  const ActiveIcon = active.icon;
+
+  const goTo = useCallback((index) => {
+    setActiveIndex(index);
+    setPanelKey((k) => k + 1);
+  }, []);
 
   const goNext = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  }, [slides.length]);
+    goTo((activeIndex + 1) % domains.length);
+  }, [activeIndex, goTo]);
 
   const goPrev = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  }, [slides.length]);
-
-  const goNextMobile = useCallback(() => {
-    setCurrentMobile((prev) => (prev + 1) % aboutCards.length);
-  }, []);
-
-  const goPrevMobile = useCallback(() => {
-    setCurrentMobile((prev) => (prev - 1 + aboutCards.length) % aboutCards.length);
-  }, []);
+    goTo((activeIndex - 1 + domains.length) % domains.length);
+  }, [activeIndex, goTo]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (isMdUp) {
-        goNext();
-      } else {
-        goNextMobile();
-      }
-    }, AUTO_ADVANCE_MS);
-    return () => clearInterval(timer);
-  }, [goNext, goNextMobile, isMdUp]);
+    const prefersReducedMotion = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    )?.matches;
+    if (paused || prefersReducedMotion) return undefined;
+    const timer = window.setInterval(goNext, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(timer);
+  }, [goNext, paused]);
+
+  const surface = isDark ? 'rgba(58, 82, 92, 0.72)' : 'rgba(255, 255, 255, 0.55)';
+  const surfaceBorder = isDark ? 'rgba(192, 214, 223, 0.22)' : 'rgba(79, 109, 122, 0.28)';
+  const glow = isDark ? 'rgba(221, 110, 66, 0.22)' : 'rgba(221, 110, 66, 0.18)';
 
   return (
-    <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
-      <Box sx={{ py: { xs: 4, sm: 5, md: 6 } }}>
-        <Typography
-          variant="h3"
-          component="h1"
-          sx={{
-            fontWeight: 700,
-            mb: { xs: 3, sm: 4 },
-            textAlign: 'center',
-            fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
-            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          About Me
-        </Typography>
+    <Box
+      sx={{
+        position: 'relative',
+        overflow: 'hidden',
+        my: { xs: -2, sm: -3, md: -4 },
+        background: isDark
+          ? 'radial-gradient(ellipse at 80% 0%, #3A525C 0%, #2C3E46 55%, #24343b 100%)'
+          : 'radial-gradient(ellipse at 85% 8%, #D5E4EB 0%, #E8DAB2 48%, #F3E9D0 100%)',
+      }}
+    >
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          width: { xs: 200, md: 320 },
+          height: { xs: 200, md: 320 },
+          borderRadius: '50%',
+          top: { xs: -40, md: -60 },
+          left: { xs: -30, md: 40 },
+          background: `radial-gradient(circle, ${theme.palette.primary.main}50 0%, transparent 70%)`,
+          animation: `${drift} 13s ease-in-out infinite`,
+          pointerEvents: 'none',
+          filter: 'blur(4px)',
+        }}
+      />
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          width: { xs: 180, md: 280 },
+          height: { xs: 180, md: 280 },
+          borderRadius: '50%',
+          bottom: { xs: 60, md: 100 },
+          right: { xs: -40, md: 20 },
+          background: `radial-gradient(circle, ${theme.palette.secondary.main}40 0%, transparent 70%)`,
+          animation: `${drift} 15s ease-in-out infinite reverse`,
+          pointerEvents: 'none',
+          filter: 'blur(6px)',
+        }}
+      />
 
-        {isMdUp ? (
-          <Box
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, px: { xs: 2, sm: 3 } }}>
+        <Box sx={{ py: { xs: 4, sm: 5, md: 7 } }}>
+          <Stack
+            spacing={1.5}
+            alignItems="center"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: { xs: 0.5, sm: 2 },
-              mx: { xs: -1, sm: 0 },
+              textAlign: 'center',
+              mb: { xs: 4, sm: 5 },
+              animation: `${fadeUp} 0.55s ease-out both`,
             }}
           >
-            {slides.length > 1 && (
-              <IconButton
-                onClick={goPrev}
-                aria-label="Previous"
-                sx={{
-                  flexShrink: 0,
-                  bgcolor: 'background.paper',
-                  boxShadow: 2,
-                  '&:hover': { bgcolor: 'action.hover' },
-                }}
-              >
-                <ChevronLeftIcon />
-              </IconButton>
-            )}
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: '1.9rem', sm: '2.4rem', md: '3rem' },
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              About Me
+            </Typography>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{
+                maxWidth: 640,
+                fontSize: { xs: '0.95rem', sm: '1.05rem' },
+                lineHeight: 1.75,
+              }}
+            >
+              Full-stack developer and cloud architect building scalable applications with AI/ML,
+              serverless systems, and clean engineering — click a focus area to explore.
+            </Typography>
+          </Stack>
+
+          <Box
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onTouchStart={() => setPaused(true)}
+            onFocusCapture={() => setPaused(true)}
+            onBlurCapture={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+            }}
+            sx={{ animation: `${fadeUp} 0.6s ease-out 0.1s both` }}
+          >
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ display: { xs: 'block', md: 'none' }, mb: 1, textAlign: 'center' }}
+            >
+              Swipe categories sideways
+            </Typography>
+            <Box
+              aria-label="Scroll for more categories"
+              sx={{
+                display: 'flex',
+                gap: 1,
+                overflowX: 'auto',
+                pb: 1.5,
+                mb: 2,
+                mx: { xs: -0.5, sm: 0 },
+                px: { xs: 0.5, sm: 0 },
+                scrollSnapType: 'x mandatory',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'thin',
+                '&::-webkit-scrollbar': { height: 6 },
+                '&::-webkit-scrollbar-thumb': {
+                  bgcolor: theme.palette.primary.main,
+                  borderRadius: 3,
+                },
+              }}
+            >
+              {domains.map((domain, index) => {
+                const Icon = domain.icon;
+                const selected = index === activeIndex;
+                return (
+                  <Box
+                    key={domain.id}
+                    component="button"
+                    type="button"
+                    onClick={() => goTo(index)}
+                    aria-pressed={selected}
+                    sx={{
+                      all: 'unset',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      px: { xs: 1.75, sm: 2 },
+                      py: 1.35,
+                      minHeight: 44,
+                      borderRadius: 2,
+                      flexShrink: 0,
+                      scrollSnapAlign: 'start',
+                      bgcolor: selected
+                        ? theme.palette.primary.main
+                        : surface,
+                      color: selected ? '#fff' : theme.palette.text.primary,
+                      border: `1px solid ${selected ? theme.palette.primary.main : surfaceBorder}`,
+                      boxShadow: selected ? `0 8px 22px ${glow}` : 'none',
+                      transform: selected ? 'translateY(-2px)' : 'none',
+                      transition: 'transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        borderColor: theme.palette.primary.main,
+                      },
+                      '&:focus-visible': {
+                        outline: `2px solid ${theme.palette.primary.main}`,
+                        outlineOffset: 2,
+                      },
+                    }}
+                  >
+                    <Icon sx={{ fontSize: 20 }} />
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: { xs: '0.85rem', sm: '0.92rem' },
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {domain.short}
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Box>
 
             <Box
+              key={panelKey}
               sx={{
-                flex: 1,
-                minWidth: 0,
-                position: 'relative',
-                overflow: 'hidden',
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: '1.15fr 1fr' },
+                gap: { xs: 2.5, md: 3.5 },
+                p: { xs: 2, sm: 2.5, md: 3 },
+                borderRadius: 3,
+                backgroundColor: surface,
+                border: `1px solid ${surfaceBorder}`,
+                backdropFilter: 'blur(10px)',
+                boxShadow: `0 16px 40px ${isDark ? 'rgba(0,0,0,0.25)' : 'rgba(79,109,122,0.12)'}`,
+                animation: `${panelIn} 0.4s ease-out both`,
+                minHeight: { md: 360 },
               }}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  transition: 'transform 0.4s ease-out',
-                  transform: `translateX(-${currentSlide * 100}%)`,
+                  position: 'relative',
+                  borderRadius: 2.5,
+                  overflow: 'hidden',
+                  minHeight: { xs: 200, sm: 240, md: '100%' },
+                  backgroundImage: `linear-gradient(135deg, rgba(44,62,70,0.15), rgba(221,110,66,0.28)), url(${active.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }}
               >
-                {slides.map((slideCards, slideIdx) => (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: 16,
+                    bottom: 16,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    px: 1.5,
+                    py: 0.85,
+                    borderRadius: 2,
+                    bgcolor: isDark ? 'rgba(44, 62, 70, 0.88)' : 'rgba(232, 218, 178, 0.92)',
+                    color: theme.palette.primary.main,
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    backdropFilter: 'blur(6px)',
+                  }}
+                >
+                  <ActiveIcon sx={{ fontSize: 20 }} />
+                  {activeIndex + 1} / {domains.length}
+                </Box>
+              </Box>
+
+              <Stack spacing={2} justifyContent="center">
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Box
-                    key={slideIdx}
                     sx={{
-                      flex: '0 0 100%',
-                      width: '100%',
-                      px: { xs: 1, sm: 0 },
+                      width: 48,
+                      height: 48,
+                      borderRadius: 2,
+                      display: 'grid',
+                      placeItems: 'center',
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                      color: '#fff',
+                      boxShadow: `0 8px 20px ${glow}`,
                     }}
                   >
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      sx={{
-                        justifyContent: { xs: 'center', md: 'space-between' },
-                        flexWrap: 'nowrap',
-                        gap: 2,
-                      }}
-                    >
-                      {slideCards.map((card) => {
-                        const Icon = card.icon;
-                        return (
-                          <Box
-                            key={card.id}
-                            sx={{
-                              flex: '1 1 0',
-                              minWidth: 0,
-                              maxWidth: { xs: '100%', md: '33.333%' },
-                            }}
-                          >
-                            <Card
-                              sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                backgroundColor: theme.palette.mode === 'dark' ? '#3A525C' : '#C0D6DF',
-                                border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
-                                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                                '&:hover': {
-                                  transform: 'translateY(-4px)',
-                                  boxShadow: 2,
-                                },
-                              }}
-                            >
-                              <CardMedia
-                                component="img"
-                                image={card.image}
-                                alt={card.title}
-                                sx={{ objectFit: 'cover', height: { xs: 140, sm: 180, md: 200 } }}
-                              />
-                              <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5, md: 3 } }}>
-                                <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: 2 }}>
-                                  <Icon
-                                    sx={{
-                                      fontSize: { xs: 32, sm: 36, md: 40 },
-                                      color: card.iconColor.startsWith('#')
-                                        ? card.iconColor
-                                        : (theme.palette[card.iconColor.split('.')[0]]?.main ?? theme.palette.primary.main),
-                                      mt: 0.5,
-                                      flexShrink: 0,
-                                    }}
-                                  />
-                                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                                      {card.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                                      {card.description}
-                                    </Typography>
-                                    {card.skills.length > 0 && (
-                                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1, mt: 2 }}>
-                                        {card.skills.map((skill) => (
-                                          <Chip key={skill} label={skill} size="small" variant="outlined" />
-                                        ))}
-                                      </Stack>
-                                    )}
-                                  </Box>
-                                </Stack>
-                              </CardContent>
-                            </Card>
-                          </Box>
-                        );
-                      })}
-                      {slideCards.length < CARDS_PER_SLIDE &&
-                        Array.from({ length: CARDS_PER_SLIDE - slideCards.length }).map((_, i) => (
-                          <Box key={`placeholder-${i}`} sx={{ flex: '1 1 0', minWidth: 0, maxWidth: { xs: '100%', md: '33.333%' } }} />
-                        ))}
-                    </Stack>
+                    <ActiveIcon />
                   </Box>
-                ))}
-              </Box>
-            </Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    {active.title}
+                  </Typography>
+                </Box>
 
-            {slides.length > 1 && (
-              <IconButton
-                onClick={goNext}
-                aria-label="Next"
-                sx={{
-                  flexShrink: 0,
-                  bgcolor: 'background.paper',
-                  boxShadow: 2,
-                  '&:hover': { bgcolor: 'action.hover' },
-                }}
-              >
-                <ChevronRightIcon />
-              </IconButton>
-            )}
-          </Box>
-        ) : (
-          <Box sx={{ maxWidth: 620, mx: 'auto' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-              <IconButton
-                onClick={goPrevMobile}
-                aria-label="Previous"
-                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
-              >
-                <ChevronLeftIcon />
-              </IconButton>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-                {currentMobile + 1} / {aboutCards.length}
-              </Typography>
-              <IconButton
-                onClick={goNextMobile}
-                aria-label="Next"
-                sx={{ bgcolor: 'background.paper', boxShadow: 2, '&:hover': { bgcolor: 'action.hover' } }}
-              >
-                <ChevronRightIcon />
-              </IconButton>
-            </Box>
-
-            {(() => {
-              const card = aboutCards[currentMobile];
-              const Icon = card.icon;
-              return (
-                <Card
+                <Typography
+                  color="text.secondary"
                   sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    backgroundColor: theme.palette.mode === 'dark' ? '#3A525C' : '#C0D6DF',
-                    border: `1px solid ${theme.palette.mode === 'dark' ? '#4F6D7A' : '#C0D6DF'}`,
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: 2,
+                    lineHeight: 1.8,
+                    fontSize: { xs: '0.92rem', sm: '1rem' },
+                  }}
+                >
+                  {active.description}
+                </Typography>
+
+                <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
+                  {active.skills.map((skill, i) => (
+                    <Chip
+                      key={`${active.id}-${skill}`}
+                      label={skill}
+                      size="small"
+                      sx={{
+                        fontWeight: 600,
+                        bgcolor: isDark ? 'rgba(44, 62, 70, 0.85)' : 'rgba(232, 218, 178, 0.9)',
+                        border: `1px solid ${theme.palette.primary.main}55`,
+                        color: theme.palette.text.primary,
+                        animation: `${skillPop} 0.35s ease-out ${0.05 + i * 0.05}s both`,
+                        transition: 'transform 0.2s ease, border-color 0.2s ease',
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          borderColor: theme.palette.primary.main,
+                        },
+                      }}
+                    />
+                  ))}
+                </Stack>
+
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ pt: 0.5 }}>
+                  <IconButton
+                    onClick={goPrev}
+                    aria-label="Previous focus area"
+                    sx={{
+                      bgcolor: isDark ? 'rgba(44, 62, 70, 0.7)' : 'rgba(232, 218, 178, 0.8)',
+                      '&:hover': { bgcolor: theme.palette.primary.main, color: '#fff' },
+                    }}
+                  >
+                    <ChevronLeftIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={goNext}
+                    aria-label="Next focus area"
+                    sx={{
+                      bgcolor: isDark ? 'rgba(44, 62, 70, 0.7)' : 'rgba(232, 218, 178, 0.8)',
+                      '&:hover': { bgcolor: theme.palette.primary.main, color: '#fff' },
+                    }}
+                  >
+                    <ChevronRightIcon />
+                  </IconButton>
+                  <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                    {paused ? 'Paused while interacting' : 'Auto-playing'}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Box>
+
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={0}
+              sx={{ mt: 1.5 }}
+            >
+              {domains.map((domain, idx) => (
+                <Box
+                  key={domain.id}
+                  component="button"
+                  type="button"
+                  aria-label={`Go to ${domain.title}`}
+                  onClick={() => goTo(idx)}
+                  sx={{
+                    all: 'unset',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 44,
+                    height: 44,
+                    '&:focus-visible': {
+                      outline: `2px solid ${theme.palette.primary.main}`,
+                      outlineOffset: 2,
+                      borderRadius: '50%',
                     },
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    image={card.image}
-                    alt={card.title}
-                    sx={{ objectFit: 'cover', height: { xs: 160, sm: 200 } }}
-                  />
-                  <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5 } }}>
-                    <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: 2 }}>
-                      <Icon
-                        sx={{
-                          fontSize: { xs: 32, sm: 36 },
-                          color: card.iconColor.startsWith('#')
-                            ? card.iconColor
-                            : (theme.palette[card.iconColor.split('.')[0]]?.main ?? theme.palette.primary.main),
-                          mt: 0.5,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, fontSize: { xs: '1rem', sm: '1.15rem' } }}>
-                          {card.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
-                          {card.description}
-                        </Typography>
-                        {card.skills.length > 0 && (
-                          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1, mt: { xs: 1.5, sm: 2 } }}>
-                            {card.skills.map((skill) => (
-                              <Chip key={skill} label={skill} size="small" variant="outlined" />
-                            ))}
-                          </Stack>
-                        )}
-                      </Box>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              );
-            })()}
-
-            {aboutCards.length > 1 && (
-              <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
-                {aboutCards.map((_, idx) => (
                   <Box
-                    key={idx}
-                    onClick={() => setCurrentMobile(idx)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && setCurrentMobile(idx)}
-                    aria-label={`Go to card ${idx + 1}`}
                     sx={{
-                      width: 10,
+                      width: activeIndex === idx ? 28 : 10,
                       height: 10,
-                      borderRadius: '50%',
-                      bgcolor: currentMobile === idx ? 'primary.main' : 'action.selected',
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s, background-color 0.2s',
-                      '&:hover': { transform: 'scale(1.2)' },
+                      borderRadius: 999,
+                      bgcolor:
+                        activeIndex === idx
+                          ? theme.palette.primary.main
+                          : `${theme.palette.secondary.main}66`,
+                      transition: 'width 0.25s ease, background-color 0.25s ease',
                     }}
                   />
-                ))}
-              </Stack>
-            )}
+                </Box>
+              ))}
+            </Stack>
           </Box>
-        )}
-
-        {isMdUp && slides.length > 1 && (
-          <Stack direction="row" justifyContent="center" spacing={0.5} sx={{ mt: { xs: 2, sm: 3 } }}>
-            {slides.map((_, idx) => (
-              <Box
-                key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && setCurrentSlide(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  bgcolor: currentSlide === idx ? 'primary.main' : 'action.selected',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s, background-color 0.2s',
-                  '&:hover': { transform: 'scale(1.2)' },
-                }}
-              />
-            ))}
-          </Stack>
-        )}
-      </Box>
-    </Container>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

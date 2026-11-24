@@ -57,16 +57,6 @@ const projects = [
     featured: true,
   },
   {
-    id: 'task',
-    title: 'Task Management App',
-    description:
-      'A productivity tool for managing tasks and projects. Built with React Redux for state management and Firebase for real-time database.',
-    link: 'https://github.com/yourusername/project-two',
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&h=360&fit=crop',
-    tags: ['React', 'Redux', 'Firebase'],
-    categories: ['apps'],
-  },
-  {
     id: 'weather',
     title: 'Weather Dashboard',
     description:

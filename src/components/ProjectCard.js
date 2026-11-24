@@ -52,9 +52,9 @@ const ProjectCard = ({ project, featured = false }) => {
         sx={{
           position: 'relative',
           height: featured ? { xs: 180, sm: 220, md: 260 } : { xs: 140, sm: 160, md: 180 },
-          backgroundImage: `linear-gradient(135deg, rgba(44,62,70,0.2), rgba(221,110,66,0.35)), url(${project.image})`,
+          backgroundImage: `linear-gradient(180deg, rgba(44,62,70,0.08), rgba(44,62,70,0.18)), url(${project.image})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'top center',
           transform: hovered ? 'scale(1.02)' : 'scale(1)',
           transition: 'transform 0.35s ease',
         }}

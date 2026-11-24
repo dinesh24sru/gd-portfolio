@@ -45,6 +45,18 @@ const projects = [
     featured: true,
   },
   {
+    id: 'gd-habits',
+    title: 'GD Habit Tracker',
+    description:
+      'Web habit tracker with Day/Week/Month views, streaks, journaling, and focus mode. Vite + React SPA on Vercel; Cognito Google sign-in, Lambda HTTP API, and DynamoDB on AWS under a tight serverless budget.',
+    link: 'https://github.com/dinesh24sru/gd-habit-tracker-mobile',
+    liveUrl: 'https://gd-habit-tracker-mobile.vercel.app/',
+    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=900&h=520&fit=crop',
+    tags: ['React', 'AWS', 'Cognito'],
+    categories: ['live', 'apps', 'ai'],
+    featured: true,
+  },
+  {
     id: 'task',
     title: 'Task Management App',
     description:
